@@ -107,21 +107,21 @@ INSERT INTO room_amenity (room_id, amenity_id) VALUES
 -- =========================================================
 -- CUSTOMERS
 -- =========================================================
-INSERT INTO customer (full_name, address, city, state, postal_code, country, id_type, id_number, registration_date) VALUES
-('Fdaa Alhalaki', '12 Main St', 'Ottawa', 'Ontario', 'K1K1K1', 'Canada', 'Passport', 'PA123456', '2026-01-10'),
-('John Smith', '45 Queen St', 'Toronto', 'Ontario', 'M5H2N2', 'Canada', 'Driver License', 'DL987654', '2026-01-15'),
-('Sara Ahmed', '77 Bank St', 'Ottawa', 'Ontario', 'K2P1X5', 'Canada', 'Passport', 'PA654321', '2026-02-01'),
-('Lina Chen', '90 Pine Ave', 'Montreal', 'Quebec', 'H2X3Y7', 'Canada', 'Health Card', 'HC456789', '2026-02-12');
+INSERT INTO customer (full_name, address, city, state, postal_code, country, id_type, id_number, registration_date, email, password_hash) VALUES
+('Fdaa Alhalaki', '12 Main St', 'Ottawa', 'Ontario', 'K1K1K1', 'Canada', 'Passport', 'PA123456', '2026-01-10', 'fdaa.alhalaki@example.com', 'hashed_password_1'),
+('John Smith', '45 Queen St', 'Toronto', 'Ontario', 'M5H2N2', 'Canada', 'Driver License', 'DL987654', '2026-01-15', 'john.smith@example.com', 'hashed_password_2'),
+('Sara Ahmed', '77 Bank St', 'Ottawa', 'Ontario', 'K2P1X5', 'Canada', 'Passport', 'PA654321', '2026-02-01', 'sara.ahmed@example.com', 'hashed_password_3'),
+('Lina Chen', '90 Pine Ave', 'Montreal', 'Quebec', 'H2X3Y7', 'Canada', 'Health Card', 'HC456789', '2026-02-12', 'lina.chen@example.com', 'hashed_password_4');
 
 -- =========================================================
 -- EMPLOYEES
 -- =========================================================
-INSERT INTO employee (hotel_id, full_name, address, city, state, postal_code, country, ssn_sin) VALUES
-(1, 'Alice Brown', '10 Elm St', 'Ottawa', 'Ontario', 'K1A1A1', 'Canada', 'SIN100001'),
-(1, 'Mark Lee', '11 Elm St', 'Ottawa', 'Ontario', 'K1A1A2', 'Canada', 'SIN100002'),
-(2, 'Emma Wilson', '20 King St', 'Toronto', 'Ontario', 'M5V1A1', 'Canada', 'SIN200001'),
-(3, 'David Clark', '30 Rideau St', 'Ottawa', 'Ontario', 'K1N2A2', 'Canada', 'SIN300001'),
-(4, 'Sophie Martin', '40 Peel St', 'Montreal', 'Quebec', 'H3B2A1', 'Canada', 'SIN400001');
+INSERT INTO employee (hotel_id, full_name, address, city, state, postal_code, country, ssn_sin, email, password_hash) VALUES
+(1, 'Alice Brown', '10 Elm St', 'Ottawa', 'Ontario', 'K1A1A1', 'Canada', 'SIN100001', 'alice.brown@example.com', 'hashed_password_1'),
+(1, 'Mark Lee', '11 Elm St', 'Ottawa', 'Ontario', 'K1A1A2', 'Canada', 'SIN100002', 'mark.lee@example.com', 'hashed_password_2'),
+(2, 'Emma Wilson', '20 King St', 'Toronto', 'Ontario', 'M5V1A1', 'Canada', 'SIN200001', 'emma.wilson@example.com', 'hashed_password_3'),
+(3, 'David Clark', '30 Rideau St', 'Ottawa', 'Ontario', 'K1N2A2', 'Canada', 'SIN300001', 'david.clark@example.com', 'hashed_password_4'),
+(4, 'Sophie Martin', '40 Peel St', 'Montreal', 'Quebec', 'H3B2A1', 'Canada', 'SIN400001', 'sophie.martin@example.com', 'hashed_password_5');
 
 -- =========================================================
 -- ROLES
