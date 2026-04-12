@@ -1,5 +1,6 @@
-import { useState, type ChangeEvent, type FormEvent } from 'react';
+import { useState, useEffect, type ChangeEvent, type FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
+
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
@@ -42,6 +43,8 @@ export default function RegisterEmployeePage() {
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
+  const [hotels, setHotels] = useState<{ hotel_id: number; name: string; city: string }[]>([]);
+  const [roles, setRoles] = useState<{ role_id: number; role_name: string }[]>([]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
     setFormData((prev) => ({
@@ -83,6 +86,24 @@ export default function RegisterEmployeePage() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    const fetchOptions = async () => {
+      try {
+        const [hotelsRes, rolesRes] = await Promise.all([
+          fetch(`${API_URL}/api/misc/hotels`),
+          fetch(`${API_URL}/api/misc/roles`),
+        ]);
+        const hotelsData = await hotelsRes.json();
+        const rolesData = await rolesRes.json();
+        setHotels(Array.isArray(hotelsData) ? hotelsData : []);
+        setRoles(Array.isArray(rolesData) ? rolesData : []);
+      } catch (err) {
+        console.error("Failed to fetch options:", err);
+      }
+    };
+    fetchOptions();
+  }, []);
 
   return (
     <div
@@ -145,31 +166,43 @@ export default function RegisterEmployeePage() {
                   <form onSubmit={handleSubmit}>
                     <div className="row">
                       <div className="col-md-6 mb-3">
-                        <label className="form-label fw-semibold">
-                          Hotel ID
-                        </label>
-                        <input
-                          type="number"
+                        <label className="form-label fw-semibold">Hotel</label>
+                        <select
                           name="hotel_id"
                           value={formData.hotel_id}
-                          onChange={handleChange}
-                          className="form-control"
+                          onChange={(e) =>
+                            setFormData((prev) => ({ ...prev, hotel_id: e.target.value }))
+                          }
+                          className="form-select"
                           required
-                        />
+                        >
+                          <option value="">Select a hotel</option>
+                          {hotels.map((h) => (
+                            <option key={h.hotel_id} value={h.hotel_id}>
+                              {h.name} — {h.city}
+                            </option>
+                          ))}
+                        </select>
                       </div>
 
                       <div className="col-md-6 mb-3">
-                        <label className="form-label fw-semibold">
-                          Role ID
-                        </label>
-                        <input
-                          type="number"
+                        <label className="form-label fw-semibold">Role</label>
+                        <select
                           name="role_id"
                           value={formData.role_id}
-                          onChange={handleChange}
-                          className="form-control"
+                          onChange={(e) =>
+                            setFormData((prev) => ({ ...prev, role_id: e.target.value }))
+                          }
+                          className="form-select"
                           required
-                        />
+                        >
+                          <option value="">Select a role</option>
+                          {roles.map((r) => (
+                            <option key={r.role_id} value={r.role_id}>
+                              {r.role_name}
+                            </option>
+                          ))}
+                        </select>
                       </div>
 
                       <div className="col-md-6 mb-3">

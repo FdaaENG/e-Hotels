@@ -2,14 +2,12 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './pages/LoginPage';
 import RegisterCustomer from './pages/RegisterCustomerPage';
 import RegisterEmployee from './pages/RegisterEmployeePage';
+import CustomerDashboard from './pages/CustomerDashboard';
+import EmployeeDashboard from './pages/EmployeeDashboard';
+import ManagementPage from './pages/ManagementPage';
 
-function CustomerDashboard() {
-  return <h1 className="text-2xl p-8">Customer Dashboard</h1>;
-}
 
-function EmployeeDashboard() {
-  return <h1 className="text-2xl p-8">Employee Dashboard</h1>;
-}
+
 
 export default function App() {
   return (
@@ -21,6 +19,7 @@ export default function App() {
         <Route path="/register/employee" element={<RegisterEmployee />} />
         <Route path="/customer-dashboard" element={<CustomerDashboard />} />
         <Route path="/employee-dashboard" element={<EmployeeDashboard />} />
+        <Route path="/management" element={<ManagementPage />} />
       </Routes>
     </Router>
   );

@@ -2,7 +2,8 @@ USE ehotels;
 
 -- =========================================================
 -- 1. AVAILABLE ROOMS VIEW
--- Shows rooms with hotel info
+-- Shows rooms that are not currently blocked by an active
+-- booking or an active renting
 -- =========================================================
 CREATE OR REPLACE VIEW available_rooms_view AS
 SELECT
@@ -21,17 +22,19 @@ JOIN hotel h ON r.hotel_id = h.hotel_id
 WHERE r.room_id NOT IN (
     SELECT b.room_id
     FROM booking b
-    WHERE b.status IN ('confirmed', 'active')
+    WHERE b.room_id IS NOT NULL
+      AND b.status = 'active'
 )
 AND r.room_id NOT IN (
     SELECT rt.room_id
     FROM renting rt
-    WHERE rt.status IN ('checked-in', 'active')
+    WHERE rt.room_id IS NOT NULL
+      AND rt.status = 'active'
 );
 
 -- =========================================================
 -- 2. HOTEL ROOM CAPACITY VIEW
--- Number of rooms per hotel
+-- Total number of rooms per hotel
 -- =========================================================
 CREATE OR REPLACE VIEW hotel_room_count_view AS
 SELECT
@@ -46,7 +49,7 @@ GROUP BY h.hotel_id, h.name, h.city, h.country;
 
 -- =========================================================
 -- 3. HOTEL AVAILABLE ROOM COUNT VIEW
--- Shows how many rooms are currently available in each hotel
+-- Number of currently available rooms in each hotel
 -- =========================================================
 CREATE OR REPLACE VIEW hotel_available_room_count_view AS
 SELECT
@@ -57,15 +60,18 @@ SELECT
     COUNT(r.room_id) AS available_rooms
 FROM hotel h
 LEFT JOIN room r ON h.hotel_id = r.hotel_id
-WHERE r.room_id NOT IN (
+WHERE r.room_id IS NOT NULL
+  AND r.room_id NOT IN (
     SELECT b.room_id
     FROM booking b
-    WHERE b.status IN ('confirmed', 'active')
+    WHERE b.room_id IS NOT NULL
+      AND b.status = 'active'
 )
-AND r.room_id NOT IN (
+  AND r.room_id NOT IN (
     SELECT rt.room_id
     FROM renting rt
-    WHERE rt.status IN ('checked-in', 'active')
+    WHERE rt.room_id IS NOT NULL
+      AND rt.status = 'active'
 )
 GROUP BY h.hotel_id, h.name, h.city, h.country;
 
@@ -94,7 +100,7 @@ LEFT JOIN hotel h ON r.hotel_id = h.hotel_id;
 
 -- =========================================================
 -- 5. CUSTOMER RENTINGS VIEW
--- Shows renting details with customer, employee, room, and hotel
+-- Shows renting details with customer, employee, room, hotel
 -- =========================================================
 CREATE OR REPLACE VIEW customer_rentings_view AS
 SELECT
@@ -190,7 +196,7 @@ LEFT JOIN hotel h ON r.hotel_id = h.hotel_id;
 
 -- =========================================================
 -- 10. HOTEL_CHAIN_HOTELS VIEW
--- Shows hotels grouped with their chain
+-- Shows hotels with their chain
 -- =========================================================
 CREATE OR REPLACE VIEW hotel_chain_hotels_view AS
 SELECT

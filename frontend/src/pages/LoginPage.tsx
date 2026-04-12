@@ -17,7 +17,10 @@ interface ApiResponse {
   data?: {
     token: string;
     role: string;
-    [key: string]: unknown;
+    customer_id?: number;
+    employee_id?: number;
+    full_name?: string;
+    email?: string;
   };
 }
 
@@ -81,6 +84,19 @@ export default function Login() {
       }
 
       localStorage.setItem('user', JSON.stringify(data.data || {}));
+
+      if (formData.userType === 'customer') {
+        const customerId = data.data?.customer_id;
+        if (customerId) {
+          localStorage.setItem('customer_id', String(customerId));
+        }
+      } else {
+        const employeeId = data.data?.employee_id;
+        if (employeeId) {
+          localStorage.setItem('employee_id', String(employeeId));
+        }
+      }
+      
       setMessage('Login successful');
 
       if (formData.userType === 'customer') {

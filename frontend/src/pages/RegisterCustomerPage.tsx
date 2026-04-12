@@ -12,7 +12,6 @@ interface CustomerFormData {
   country: string;
   id_type: string;
   id_number: string;
-  registration_date: string;
   email: string;
   password: string;
 }
@@ -34,7 +33,6 @@ export default function RegisterCustomerPage() {
     country: '',
     id_type: '',
     id_number: '',
-    registration_date: '',
     email: '',
     password: '',
   });
@@ -57,10 +55,14 @@ export default function RegisterCustomerPage() {
     setLoading(true);
 
     try {
+
       const response = await fetch(`${API_URL}/api/auth/customer/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          registration_date: new Date().toISOString().split('T')[0], // adds YYYY-MM-DD automatically
+        }),
       });
 
       const data: ApiResponse = await response.json();
@@ -228,18 +230,22 @@ export default function RegisterCustomerPage() {
                       </div>
 
                       <div className="col-md-6 mb-3">
-                        <label className="form-label fw-semibold">
-                          ID Type
-                        </label>
-                        <input
-                          type="text"
+                        <label className="form-label fw-semibold">ID Type</label>
+                        <select
                           name="id_type"
                           value={formData.id_type}
-                          onChange={handleChange}
-                          className="form-control"
-                          placeholder="Passport, Driver License..."
+                          onChange={(e) =>
+                            setFormData((prev) => ({ ...prev, id_type: e.target.value }))
+                          }
+                          className="form-select"
                           required
-                        />
+                        >
+                          <option value="">Select ID type</option>
+                          <option value="SSN">SSN</option>
+                          <option value="SIN">SIN</option>
+                          <option value="Passport">Passport</option>
+                          <option value="Driver License">Driver License</option>
+                        </select>
                       </div>
 
                       <div className="col-md-6 mb-3">
@@ -255,21 +261,7 @@ export default function RegisterCustomerPage() {
                           placeholder="Enter ID number"
                           required
                         />
-                      </div>
-
-                      <div className="col-md-6 mb-3">
-                        <label className="form-label fw-semibold">
-                          Registration Date
-                        </label>
-                        <input
-                          type="date"
-                          name="registration_date"
-                          value={formData.registration_date}
-                          onChange={handleChange}
-                          className="form-control"
-                          required
-                        />
-                      </div>
+                      </div>             
 
                       <div className="col-md-6 mb-3">
                         <label className="form-label fw-semibold">Email</label>
